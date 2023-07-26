@@ -3,8 +3,8 @@ import * as Yup from 'yup';
 import {Alert, AlertIcon, Box, Button, FormLabel, Image, Input, Stack, VStack} from "@chakra-ui/react";
 import {customerProfilePictureUrl, updateCustomer, uploadCustomerProfilePicture} from "../../services/client.js";
 import {errorNotification, successNotification} from "../../services/notification.js";
-import {useCallback} from "react";
-import {useDropzone} from "react-dropzone";
+import React, {useCallback} from 'react'
+import {useDropzone} from 'react-dropzone'
 
 const MyTextInput = ({label, ...props}) => {
     // useField() returns [formik.getFieldProps(), formik.getFieldMeta()]
@@ -25,37 +25,76 @@ const MyTextInput = ({label, ...props}) => {
     );
 };
 
+// const MyDropzone = ({ customerId, fetchCustomers }) => {
+//     const onDrop = useCallback(acceptedFiles => {
+//         const formData = new FormData();
+//         formData.append("file", acceptedFiles[0])
+//
+//         uploadCustomerProfilePicture(
+//             customerId,
+//             formData
+//         ).then(() => {
+//             successNotification("Success", "Profile picture uploaded")
+//             fetchCustomers()
+//         }).catch(() => {
+//             errorNotification("Error", "Profile picture failed upload")
+//         })
+//     }, [])
+//     const {getRootProps, getInputProps, isDragActive} = useDropzone({onDrop})
+//
+//     return (
+//         <Box {...getRootProps()}
+//              w={'100%'}
+//              textAlign={'center'}
+//              border={'dashed'}
+//              borderColor={'gray.200'}
+//              borderRadius={'3xl'}
+//              p={6}
+//              rounded={'md'}>
+//             <input {...getInputProps()} />
+//             {
+//                 isDragActive ?
+//                     <p>Drop the picture here ...</p> :
+//                     <p>Drag 'n' drop picture here, or click to select picture</p>
+//             }
+//         </Box>
+//     )
+// }
+
 const MyDropzone = ({ customerId, fetchCustomers }) => {
     const onDrop = useCallback(acceptedFiles => {
         const formData = new FormData();
-        formData.append("file", acceptedFiles[0])
+        formData.append("file", acceptedFiles[0]);
 
         uploadCustomerProfilePicture(
             customerId,
             formData
-        ).then(() => {
-            successNotification("Success", "Profile picture uploaded")
-            fetchCustomers()
-        }).catch(() => {
-            errorNotification("Error", "Profile picture failed upload")
-        })
+        )
+            .then((res) => {
+                successNotification("Success", "Profile picture uploaded")
+                fetchCustomers();
+            })
+            .catch((e) => {
+                errorNotification("Error", "Profile picture failed upload")
+            })
     }, [])
     const {getRootProps, getInputProps, isDragActive} = useDropzone({onDrop})
 
     return (
         <Box {...getRootProps()}
-             w={'100%'}
+            w={'100%'}
              textAlign={'center'}
              border={'dashed'}
              borderColor={'gray.200'}
              borderRadius={'3xl'}
              p={6}
-             rounded={'md'}>
+             rounded={"md"}
+        >
             <input {...getInputProps()} />
             {
                 isDragActive ?
-                    <p>Drop the picture here ...</p> :
-                    <p>Drag 'n' drop picture here, or click to select picture</p>
+                    <p>Drop the pictures here ...</p> :
+                    <p>Drag 'n' drop some picture here, or click to select picture</p>
             }
         </Box>
     )
